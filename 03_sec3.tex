@@ -1,5 +1,5 @@
 \subsection{Explanation of graph-search based energy management algorithm}
-The graph search based energy management solution tested in the paper is designed to be implemented at the point of common coupling (PCC) of a microgrid containing DG and ES. The energy storage management (ESM) solution  is in charge of controlling the battery connected to the grid with the objective of getting the most cost optimum use of the resources available. The objective of the ESM is to optimize the use cost of energy storage under changing energy prices taking advantage of load and DG generation forecasting. Fig. \ref{fig:F1_CA} shows the top-level architecture of the ESM. As seen in the figure, the inputs of the system are the real-time price (RTP) prediction, load prediction, and the DG output prediction, which in this case is a photovoltaic (PV) plant output. It will also consider the current state of the load, current PV generation, and the state of charge of the ES. The output of the ESM is the optimum battery charge and discharge control references based on the current and forecasted data.
+The graph search based energy management solution tested in the paper is designed to be implemented at the point of common coupling (PCC) of a microgrid containing DG and ES. The energy storage management (ESM) solution is in charge of controlling the battery connected to the grid with the objective of getting the most cost optimum use of the resources available. The objective of the ESM is to optimize the use cost of energy storage under changing energy prices taking advantage of load and DG generation forecasting. The inputs of the system are the real-time price (RTP) prediction, load prediction, and the DG output prediction, which in this case is a photovoltaic (PV) plant output. It will also consider the current state of the load, current PV generation, and the state of charge of the ES. The output of the ESM is the optimum battery charge and discharge control references based on the current and forecasted data.
 
 % \begin{figure}[!htbp]
 % \centering
@@ -11,19 +11,19 @@ The graph search based energy management solution tested in the paper is designe
 
 %  Fig. \ref{fig:F1_CA} shows the top-level architecture of the ESMS. As seen in the figure, the inputs of the system are the real-time price (RTP) prediction, load prediction, and the DG prediction, which in this case is a photovoltaic (PV) plant. It will also consider the current state of the load, PV generation, and ES. The output of the ESMS is the optimum battery charge and discharge control references based on the current and forecasted data.
 
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width = 0.8\linewidth]{figs/EMS_FIG.png}
-    \caption{Controller top level architecture}
-    \label{fig:F1_CA}
-\end{figure}
+% \begin{figure}[!ht]
+%     \centering
+%     \includegraphics[width = 0.8\linewidth]{figs/EMS_FIG.png}
+%     \caption{Controller top level architecture}
+%     \label{fig:F1_CA}
+% \end{figure}
 
 In order to find the optimum cost solution based on the current status of the system and future forecasts, the optimization problem is formulated using a graph search problem approach. To represent the solution space of the problem as a graph, the state of charge (SOC) of the ES, and both the prediction horizon and the control horizon are discretized. Fig. \ref{fig:F1_Dis} demonstrates an example of the discretized solution space.
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width = 0.8\linewidth]{figs/F1_1_Dis.png}
-    \caption{Discretizing solution space}
+    \includegraphics[width = 0.7\linewidth]{figs/F1_1_Dis.png}
+    \caption{Discretizing solution space of ES as a graph.}
     \label{fig:F1_Dis}
 \end{figure}
 
@@ -35,21 +35,21 @@ The graph search algorithm used to search through the constructed graph is the A
 By defining the solution space with a combination of nodes and edges, the optimization problem can be formulated as a graph search problem. At the inception, the starting node is determined by the current status of the system. Then, the following nodes and edges are generated using the forecasted data available. A discrete set of endpoints are set as the goals of the search. The A* algorithm runs for all the goal nodes and the node with the lowest path cost is selected as the best end node. The shortest graph search path to that node is selected as the optimum path.
 
 The EMS recalculates the optimum path using the search algorithm at every time step based on updated information. The system status is assumed to be constant between time steps. The cost of going from a parent node to a child node is calculated by combining the real cost of getting to that child node and the heuristic cost of getting to the goal from that child node. The real cost of going from a parent node $p$ at time $T=t$ to a child node $c$ at time $T=t+\Delta T$ is denoted as $C_{actual}(pc)$. It is calculated according to (\ref{eq:C_actual}).
-
+\vspace{-1mm}
 \begin{equation}
 \label{eq:C_actual}
     C_{actual}(pc) =  C_{ESS}(pc)+C_{GRID}(t)+C_{best}(p)
 \end{equation}
-
+\vspace{-1mm}
 Here, $\Delta T$ represents the time between two time steps. $C_{actual}(pc)$ represent the total cost of going to the child node $c$ from parent node $p$. $C_{ESS}(pc)$ represent cost of energy storage to go from parent node $p$ to child node $c$. $C_{GRID}(t)$ is the cost of using the grid between time $T=t$ and time $T=t+\Delta T$. $C_{best}(p)$ represent the best or least cost to get to the parent node $p$ from the start node. $C_{ESS}(pc)$ is calculated according to (\ref{eq:C_ESS}).
-
+\vspace{-1mm}
 \begin{equation}
 \label{eq:C_ESS}
-C_{ESS}(pc) = |(SOC_p - SOC_c)|*ESS_{CAP}*R_{ESS} 
+C_{ESS}(pc) = |(SOC_p - SOC_c)|*ESS_{CAP}*R_{ESS}
 \end{equation}
-
+\vspace{-1mm}
 Here, $SOC_p$ and $SOC_c$ represent the state of charge at parent and child node. $ESS_{CAP}$ represent the total energy capacity of the energy storage. And $R_{ESS}$ is the $\$/kWh$ cost of using the energy storage. $C_{GRID}(t)$ is calculated according to (\ref{eq:C_GRID}).
-
+\vspace{-1mm}
 \begin{equation}
 \label{eq:C_GRID}
 C_{GRID}(t) = 
@@ -58,17 +58,17 @@ C_{GRID}(t) =
     E_{GRID}(t)*SP(t),& \text{if }  E_{GRID}(t) < 0
 \end{cases}
 \end{equation}
-
+\vspace{-1mm}
 Here, $E_{GRID}(t)$ is the energy drawn from the grid between time $T=t$ and time $T=t+\Delta T$. $RTP(t)$ is the real-time price between $t$ and $t+\Delta T$. $SP(t)$ is the price the utility is willing to pay the consumer for selling power between $t$ and $t+\Delta T$. The heuristic cost is calculated by assuming that whichever source has the smallest cost during a time step will supply the total energy demand of that particular time step. The heuristic cost of a node at time $T = t$ is calculated according to (\ref{eq:C_H}).
 
-
+\vspace{-1mm}
 \begin{equation}
 \label{eq:C_H}
 C_H(t) = \sum_{n=t}^{end} D(n)*R_{best}(n)
 \end{equation}
-
+\vspace{-1mm}
 Here, $C_H(t)$ represents the heuristic cost at time $t$. $D(n)$ is the demand between time $T = n$ and time $T = n+\Delta T$. $R_{best}(n)$ is the source with the smaller cost which is calculated according to (\ref{eq:R_best}).
-
+\vspace{-1mm}
 \begin{equation}
 \label{eq:R_best}
 R_{best}(t) = 
@@ -77,7 +77,7 @@ R_{best}(t) =
     RTP(t),              & \text{otherwise}
 \end{cases}
 \end{equation}
-
+\vspace{-1mm}
 After calculating the actual cost  $C_{actual}(pc)$ and heuristic cost $C_H(t)$, the total cost is finally calculated by adding  $C_{actual}(pc)$ and $C_H(t)$.
 
 
