@@ -19,7 +19,7 @@
 \usepackage{multicol}
 %\usepackage{wrapfig}
 \usepackage{float}
-
+\usepackage{diagbox}
 %\usepackage[section]{placeins}
 %\usepackage{subcaption}
 \usepackage{array}
@@ -32,7 +32,7 @@
 \usepackage{ wasysym }
 
 
-
+\usepackage{soul}
 
 \usepackage{xcolor}
 \usepackage[switch]{lineno}
@@ -66,11 +66,11 @@ Juan~Ospina,~\IEEEmembership{Student Member,~IEEE and}
 \maketitle
 %\linenumbers
 \begin{abstract}
-This paper presents a controller hardware-in-the-loop (CHIL) validation of a novel energy storage management (ESM) solution designed to optimize the use of grid-connected distributed energy resources (DERs) based on the forecasting of generation, load, and real-time energy prices. The proposed control strategy aims to control the operations of the energy storage (ES) using the A* searching algorithm so that the total cost of energy used to serve the local electrical load is minimized. The proposed solution uses the energy storage states and available forecast data to generate a graph that is explored using the A* search algorithm with the objective of finding the optimum cost of energy. The proposed ESM is tested offline against genetic algorithm and sequential quadratic programming based solutions and shows an improvement of 5\% to 8.9\% more cost efficiency. A CHIL validation testbed was also implemented to evaluate the performance of the algorithm. A Florida based distribution grid was simulated using real field data in a DTRS, and the IEEE 1815 DNP3 communication protocol was used to establish the communication between the controller and the simulation. The graph search-based ESM was implemented in python in an external computer which served as the controller. Offline and real-time simulations are presented showing comparable results.  
+This paper presents a controller hardware-in-the-loop (CHIL) validation of a novel energy storage management (ESM) solution designed to optimize the use of grid-connected distributed energy resources (DERs) based on the forecasting of generation, load, and real-time energy prices. The proposed control strategy aims to control the operations of the energy storage (ES) using the A* searching algorithm so that the total cost of energy used to serve the local electrical load is minimized. The proposed solution uses the energy storage states and available forecast data to generate a graph that is explored using the A* search algorithm with the objective of finding the optimum cost of energy. The proposed ESM is tested offline against genetic algorithm and sequential quadratic programming based solutions and shows cost improvement of 5\% to 8.9\%. A CHIL validation testbed was also implemented to evaluate the performance of the algorithm. A Florida based distribution grid was simulated using real field data in a DTRS, and the IEEE 1815 DNP3 communication protocol was used to establish the communication between the controller and the simulation. The graph search-based ESM was implemented in python in an external computer which served as the controller. Offline and real-time simulations are presented showing comparable results.  
 \end{abstract}
                                          
 \begin{IEEEkeywords}
-A* Search Algorithm, Controller Hardware-In-the-Loop Verification, Distributed Energy Resources, Energy Storage Management, Graph Search, Real-Time Pricing
+A* Search Algorithm, Controller Hardware-In-the-Loop, Distributed Energy Resources, Energy Storage Management, Graph Search, Real-Time Pricing
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
@@ -95,7 +95,7 @@ A* Search Algorithm, Controller Hardware-In-the-Loop Verification, Distributed E
 
 
 \section{Conclusion}
-In this paper, the CHIL testing of a novel ESM solution aimed to optimize the use of grid-connected DER is proposed. The proposed scheme is designed to optimize the charging and discharging of grid-connected energy storage by formulating the problem as a graph search and solving the graph search using the A* search algorithm. The A* based ESM is tested using real data collected from the SUNGRIN project and NYISO under a net metering scheme. The offline test was compared against GA and PSO algorithm based solutions and show 5\% to 8.9\% more cost savings. The algorithm was also validated using CHIL. A Florida based distribution feeder containing smart meters was simulated in a DRTS. The communication between the DRTS and controller was established over Ethernet using the IEEE 1815 DNP3 communication protocol. The algorithm was implemented in python in a generic Linux machine and it used the help of an API developed to establish communication between the DNP3 communication protocol and python code. The CHIL simulation shows similar results to the offline simulation. Future research will focus on developing an ESM capable of controlling multiple ES and additional DERs taking into account system constraints.
+In this paper, the CHIL testing of a novel ESM solution aimed to optimize the use of grid-connected DER is proposed. The proposed scheme is designed to optimize the charging and discharging of grid-connected energy storage by formulating the problem as a graph search and solving the graph search using the A* search algorithm. The A* based ESM is tested using real data collected from the SUNGRIN project and NYISO under a net metering scheme. The offline test was compared against GA and PSO algorithm based solutions and show 5\% to 8.9\% more cost savings. The algorithm was also validated using CHIL. A Florida based distribution feeder containing smart meters was simulated in a DRTS. The communication between the DRTS and controller was established over Ethernet using the IEEE 1815 DNP3 communication protocol. The algorithm was implemented in python in a generic Linux machine and it used the help of an API developed to establish communication between the DNP3 communication protocol and python code. The CHIL simulation shows similar results to the offline simulation. \hl{The current ESM does not take into account line loss because it is optimizing a small microgrid where line loss is negligible. Future research will focus on developing an ESM capable of controlling multiple ES and additional DERs taking into account system constraints and line losses.}
 
 
 % This paper proposed a novel ESMS aimed to determine the optimal cost of ES. The ESM scheme is designed to optimize the charging and discharging of grid-connected energy storage by formulating the problem as a graph search and solving the graph search using the A* search algorithm. The A* based ESM is tested using real data collected from the SUNGRIN project, NYISO, and PG\&E. It also considers both a net metering scenario and a different sell back price scenario where the buying price of energy is different from the selling price. The ESM shows a cost saving of 5\% to 43.48\% compared to the test cases for the tested scenarios. The results show that the proposed method has the capability to adapt to various varying price profiles and system status and provides a solution that reduces cost significantly. The proposed method is also capable of finishing the computation relatively quickly. It responded within two seconds in the CHIL testing while using relatively inexpensive hardware specifications shown in table \ref{tab:PC}. The algorithm is also easily scalable. The SOC discretization and prediction horizon can be easily scaled to incorporate various needs. Finally, the ESM algorithm incorporates the well known and easily available A* graph search algorithm. This makes the algorithm easily deployable in a variety of hardware without the need for any proprietary software. Future research will focus on developing an ESM capable of controlling multiple ES and additional DERs taking into account system constraints.

@@ -1,5 +1,5 @@
 \subsection{Explanation of graph-search based energy management algorithm}
-The graph search based energy management solution tested in the paper is designed to be implemented at the point of common coupling (PCC) of a microgrid containing DG and ES. The energy storage management (ESM) solution is in charge of controlling the battery connected to the grid with the objective of getting the most cost optimum use of the resources available. The objective of the ESM is to optimize the use cost of energy storage under changing energy prices taking advantage of load and DG generation forecasting. The inputs of the system are the real-time price (RTP) prediction, load prediction, and the DG output prediction, which in this case is a photovoltaic (PV) plant output. It will also consider the current state of the load, current PV generation, and the state of charge of the ES. The output of the ESM is the optimum battery charge and discharge control references based on the current and forecasted data.
+The graph search based energy management solution tested in the paper is designed to be implemented at the point of common coupling (PCC) of a microgrid containing DG and ES. The energy storage management (ESM) solution is in charge of controlling the battery connected to the grid with the objective of getting the most cost optimum use of the available resources. The objective of the ESM is to optimize the use cost of energy storage under changing energy prices taking advantage of load and DG generation forecasting. The inputs of the system are the real-time price (RTP) prediction, load prediction, and the DG output prediction, which in this case is a photovoltaic (PV) plant output. It will also consider the current state of the load, current PV generation, and the state of charge of the ES. The output of the ESM is the optimum battery charge and discharge control references based on the current and forecasted data.
 
 % \begin{figure}[!htbp]
 % \centering
@@ -22,26 +22,26 @@ In order to find the optimum cost solution based on the current status of the sy
 
 \begin{figure}[!ht]
     \centering
-    \includegraphics[width = 0.7\linewidth]{figs/F1_1_Dis.png}
+    \includegraphics[width = \linewidth]{figs/F1_1_Dis.png}
     \caption{Discretizing solution space of ES as a graph.}
     \label{fig:F1_Dis}
 \end{figure}
 
-The horizontal axis of the figure represents time, and the vertical axis represents discrete steps in the state of charge (SOC) of the energy storage. In this simple example scenario, it is assumed that the algorithm recalculates the solution every 15 minutes (control horizon) based on available data. The SOC of the energy storage system (ESS) is discretized in steps of 20\%, and the SOC is limited between 80\% and 20\%. It is also assumed that the ESS can discharge a maximum of 40\% of its maximum SOC and charge a maximum of 20\% of its SOC in a 15 minute time step. These values are chosen arbitrarily in this simple example scenario to explain the problem. Taking these features into consideration, a directed graph is constructed looking ahead three time steps into the future. The square boxes represent nodes on the graph. The numbers inside the boxes represent the SOC of the ESS at that node. The arrows from the boxes represent all the possible states the ESS can be in the next time step according to the constraints of the system. The arrows are treated as edges of the graph. In this case, the edges are unidirectional. The goal is to find the most cost-efficient path to reach T = 45 minutes. Although in this example the algorithm considers T = 45 as the final stage, in actual application the final stage will be determined based on the actual use case.
+The horizontal axis of the figure represents time, and the vertical axis represents discrete steps in the state of charge (SOC) of the energy storage. In this simple example scenario, it is assumed that the algorithm recalculates the solution every 15 minutes (control horizon) based on available data. The SOC of the energy storage system (ESS) is discretized in steps of 20\%, and the SOC is limited between 80\% and 20\%. It is also assumed that the ESS can discharge a maximum of 40\% of its maximum SOC and charge a maximum of 20\% of its SOC in a 15 minute time-step. These values are chosen arbitrarily in this simple example scenario to explain the problem. Taking these features into consideration, a directed graph is constructed looking ahead three time-steps into the future. The square boxes represent nodes on the graph. The numbers inside the boxes represent the SOC of the ESS at that node. The arrows from the boxes represent all the possible states the ESS can be in the next time-step according to the constraints of the system. The arrows are treated as edges of the graph. In this case, the edges are unidirectional. The goal is to find the most cost-efficient path to reach T = 45 minutes. Although in this example, the algorithm considers T = 45 as the final stage, in actual application the final stage will be determined based on the actual use case.
 
 The graph search algorithm used to search through the constructed graph is the A* search algorithm. A* is a computer algorithm which is widely used to solve graph search problems. It determines the most efficient path between multiple nodes in a graph. A* is an informed search algorithm. This means, it searches between all the possible paths to the goal and finds the path incurring the least cost. To do this, it considers the paths which appear to have the least cost to get to the goal first. Starting from a specific node, it explores the graph step by step depending on the cost of going from one node to the next. The algorithm selects the node to explore based on a combination of the actual cost to get to the node and a heuristic cost that estimates the cost from the current node to the goal. The process to calculate heuristic cost is problem-specific. For the algorithm to work correctly, the heuristic cost has to be less than or equal to the actual cost of getting to the goal node. In other words, the heuristic cost function should never overestimate the cost of reaching the goal. The algorithm works by calculating the combined actual and heuristic cost for all the neighboring nodes of the starting node and puts them into a priority queue called the \textit{open list}. Then, it selects the node with the least cost and expands that node to get the cost of its neighbors. The expanded node is taken out of the priority queue and put in another list called the \textit{closed list}. The algorithm continues to expand the \textit{open list} always selecting the node with the least cost and adding it to the \textit{closed list}. The algorithm terminates when the goal node is inside the \textit{open list}, and it has the minimum cost in the \textit{open list}. Finally, the algorithm retraces its path through the \textit{closed list} to find the optimum route from start to goal. The following are the main steps of the A* search algorithm.
 \input{_A8_algorithm.tex}
 
 By defining the solution space with a combination of nodes and edges, the optimization problem can be formulated as a graph search problem. At the inception, the starting node is determined by the current status of the system. Then, the following nodes and edges are generated using the forecasted data available. A discrete set of endpoints are set as the goals of the search. The A* algorithm runs for all the goal nodes and the node with the lowest path cost is selected as the best end node. The shortest graph search path to that node is selected as the optimum path.
 
-The EMS recalculates the optimum path using the search algorithm at every time step based on updated information. The system status is assumed to be constant between time steps. The cost of going from a parent node to a child node is calculated by combining the real cost of getting to that child node and the heuristic cost of getting to the goal from that child node. The real cost of going from a parent node $p$ at time $T=t$ to a child node $c$ at time $T=t+\Delta T$ is denoted as $C_{actual}(pc)$. It is calculated according to (\ref{eq:C_actual}).
+The EMS recalculates the optimum path using the search algorithm at every time-step based on updated information. The system status is assumed to be constant between time-steps. The cost of going from a parent node to a child node is calculated by combining the real cost of getting to that child node and the heuristic cost of getting to the goal from that child node. The real cost of going from a parent node $p$ at time $T=t$ to a child node $c$ at time $T=t+\Delta T$ is denoted as $C_{actual}(pc)$. It is calculated according to (\ref{eq:C_actual}).
 \vspace{-1mm}
 \begin{equation}
 \label{eq:C_actual}
     C_{actual}(pc) =  C_{ESS}(pc)+C_{GRID}(t)+C_{best}(p)
 \end{equation}
 \vspace{-1mm}
-Here, $\Delta T$ represents the time between two time steps. $C_{actual}(pc)$ represent the total cost of going to the child node $c$ from parent node $p$. $C_{ESS}(pc)$ represent cost of energy storage to go from parent node $p$ to child node $c$. $C_{GRID}(t)$ is the cost of using the grid between time $T=t$ and time $T=t+\Delta T$. $C_{best}(p)$ represent the best or least cost to get to the parent node $p$ from the start node. $C_{ESS}(pc)$ is calculated according to (\ref{eq:C_ESS}).
+Here, $\Delta T$ represents the time between two time-steps. $C_{actual}(pc)$ represents the total cost of going to the child node $c$ from parent node $p$. $C_{ESS}(pc)$ represent cost of energy storage to go from parent node $p$ to child node $c$. $C_{GRID}(t)$ is the cost of using the grid between time $T=t$ and time $T=t+\Delta T$. $C_{best}(p)$ represent the best or least cost to get to the parent node $p$ from the start node. $C_{ESS}(pc)$ is calculated according to (\ref{eq:C_ESS}).
 \vspace{-1mm}
 \begin{equation}
 \label{eq:C_ESS}
@@ -59,7 +59,7 @@ C_{GRID}(t) =
 \end{cases}
 \end{equation}
 \vspace{-1mm}
-Here, $E_{GRID}(t)$ is the energy drawn from the grid between time $T=t$ and time $T=t+\Delta T$. $RTP(t)$ is the real-time price between $t$ and $t+\Delta T$. $SP(t)$ is the price the utility is willing to pay the consumer for selling power between $t$ and $t+\Delta T$. The heuristic cost is calculated by assuming that whichever source has the smallest cost during a time step will supply the total energy demand of that particular time step. The heuristic cost of a node at time $T = t$ is calculated according to (\ref{eq:C_H}).
+Here, $E_{GRID}(t)$ is the energy drawn from the grid between time $T=t$ and time $T=t+\Delta T$. $RTP(t)$ is the real-time price between $t$ and $t+\Delta T$. $SP(t)$ is the price the utility is willing to pay to the consumer for selling power between $t$ and $t+\Delta T$. The heuristic cost is calculated by assuming that whichever source has the smallest cost during a time-step will supply the total energy demand of that particular time-step. The heuristic cost of a node at time $T = t$ is calculated according to (\ref{eq:C_H}).
 
 \vspace{-1mm}
 \begin{equation}
@@ -78,7 +78,9 @@ R_{best}(t) =
 \end{cases}
 \end{equation}
 \vspace{-1mm}
-After calculating the actual cost  $C_{actual}(pc)$ and heuristic cost $C_H(t)$, the total cost is finally calculated by adding  $C_{actual}(pc)$ and $C_H(t)$.
+After calculating the actual cost  $C_{actual}(pc)$ and heuristic cost $C_H(t)$, the total cost is finally calculated by adding  $C_{actual}(pc)$ and $C_H(t)$. 
+
+
 
 
 
